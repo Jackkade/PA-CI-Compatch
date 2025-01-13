@@ -1,0 +1,120 @@
+pa_new_colony = {
+	potential = {
+		always = yes
+	}
+
+	hidden = yes
+
+	trigger = {
+		OR = {
+			NOT = {
+				OR = {
+					#The idea here is that the colony will be finished once the owner has invested something in the province.
+
+					#Now this will work
+					num_of_times_improved = 5
+
+					
+					num_of_buildings_in_province = 3
+
+					#AI will never do this unfortuately
+					num_of_times_expanded_infrastructure = 1
+
+					#Has Production Manufactory
+					has_building = wharf
+					has_building = weapons
+					has_building = textile
+					has_building = plantations
+					has_building = tradecompany
+					has_building = farm_estate
+					has_building = mills
+					#Maybe Shouldn't? 
+					has_building = furnace
+					has_building = mint
+				}
+			}
+			NOT = {
+				had_province_flag = {
+					flag = new_colony_established
+					days = 365
+				}
+			}
+		}
+		OR = {
+			has_province_modifier = pa_new_colony_cooldown 
+			is_city = no
+		}
+		is_empty = no
+	}
+
+	
+	#Province scope
+	on_activation = {
+		reset_to_pre_colonial_culture_religion = yes
+	}
+	
+
+	on_deactivation = {
+		if = {
+			limit = {
+				is_empty = no
+				NOT = {
+					culture_group = afro_american_group
+				}
+				OR = {      # Only convert colony in New World & Oceania
+					continent = north_america
+					continent = south_america
+					continent = oceania
+				}
+				owner = { # Natives to the continents won't replace other natives except through convential means
+					NOT = {
+						OR = {
+							technology_group = north_american
+							technology_group = south_american
+							technology_group = mesoamerican
+							technology_group = andean
+							technology_group = aboriginal_tech
+							technology_group = polynesian_tech
+							technology_group = high_american
+						}
+					}
+				}
+			}
+			change_culture = owner
+			change_original_culture = owner
+			change_religion = owner		#Always Change religion
+		}
+		#Remove Cost from random overlord province
+		if = {
+			limit = {
+				owner = {
+					is_colonial_nation = yes
+				}
+			}
+			owner = {
+				overlord = {
+					random_owned_province = {
+						limit = {
+							has_province_modifier = pa_new_colonial_nation_colony_overlord_upkeep
+						}
+						remove_province_modifier = pa_new_colonial_nation_colony_overlord_upkeep
+					}
+				}
+			}
+		}
+		remove_province_triggered_modifier = pa_new_colony
+		remove_province_modifier = pa_new_colony_cooldown
+		remove_province_modifier = pa_new_colonial_nation_colony
+
+		#Colony cost modifiers
+		remove_province_modifier = pa_new_colony_reduced_cost_1
+		remove_province_modifier = pa_new_colony_reduced_cost_2
+		remove_province_modifier = pa_new_colony_reduced_cost_3
+		remove_province_modifier = pa_new_colony_increased_cost_1
+		remove_province_modifier = pa_new_colony_increased_cost_2
+		remove_province_modifier = pa_new_colony_increased_cost_3
+		remove_province_modifier = pa_new_colony_increased_cost_4
+		remove_province_modifier = pa_new_colony_increased_cost_native
+		remove_province_modifier = pa_new_colony_increased_cost_burgers_privilege
+	}
+}
