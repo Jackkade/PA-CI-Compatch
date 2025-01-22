@@ -1,0 +1,12 @@
+
+on_colony_finished = { #ROOT - Province
+}
+
+on_buy_religious_reform = {
+	events = {
+		religious_reforms.1
+		religious_reforms.2
+		religious_reforms.3
+        religious_reforms.4
+	}
+}
